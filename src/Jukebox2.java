@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.*;
 
 public class Jukebox2 {
     public static void main(String[] args){
@@ -10,19 +11,51 @@ public class Jukebox2 {
     public void go() {
         List<SongV3> songList = MockSongs.getSongsV3();
         System.out.println(songList);
-        Collections.sort(songList);
+//        TitleCompare titleCompare = new TitleCompare();
+
+        songList.sort((one,two) -> one.getTitle().compareTo(two.getTitle()));
+//        Collections.sort(songList);
+//        System.out.println(songList);
+//        ArtistCompare artistCompare = new ArtistCompare();
+
+
+
         System.out.println(songList);
-        ArtistCompare artistCompare = new ArtistCompare();
-        songList.sort(artistCompare);
+        Set<SongV3> songSet = new HashSet<>(songList);
+        System.out.println(songSet);
+        songList.sort((one,two) ->  one.getArtist().compareTo(two.getArtist()));
         System.out.println(songList);
     }
 }
 
 
-    class SongV3 implements Comparable<SongV3> {
+class TitleCompare implements Comparator <SongV3> {
+    public int compare(SongV3 one, SongV3 two){
+        return one.getTitle().compareTo(two.getTitle());
+    }
+}
+class ArtistCompare implements Comparator<SongV3>{
+    public int compare(SongV3 one, SongV3 two) {
+        return one.getArtist().compareTo(two.getArtist());
+    }
+}
+
+
+class SongV3 implements Comparable<SongV3> {
         private String title;
         private String artist;
         private int bpm;
+
+
+        public boolean equals(Object aSong){
+            SongV3 other = (SongV3) aSong;
+            return title.equals(other.getTitle());
+        }
+
+        public int hashCode() {
+            return title.hashCode();
+        }
+
 
         public int compareTo(SongV3 s){
             return title.compareTo(s.getTitle());
@@ -79,6 +112,7 @@ public class Jukebox2 {
             songs.add(new SongV3("sommersault","zero 7",147));
             songs.add(new SongV3("cassidy","grateful dead",158));
             songs.add(new SongV3("$10","hitchiker",140));
+            songs.add(new SongV3("havana","cabello",105));
             songs.add(new SongV3("Cassidy","grateful dead",158));
             songs.add(new SongV3("50 ways","simon",102));
             return songs;
